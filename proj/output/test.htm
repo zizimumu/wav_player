@@ -3,9 +3,9 @@
 <title>Static Call Graph - [.\output\test.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\output\test.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Sun Jul 02 08:58:17 2017
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Sun Jul 02 15:04:18 2017
 <BR><P>
-<H3>Maximum Stack Usage =        944 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
+<H3>Maximum Stack Usage =        952 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
 __rt_entry_main &rArr; main &rArr; wav_play &rArr; f_open &rArr; follow_path &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; disk_write &rArr; SD_WriteMultiBlocks &rArr; SD_LowLevel_DMA_TxConfig &rArr; DMA_Init
 <P>
@@ -254,7 +254,7 @@ Global Symbols
 <P><STRONG><a name="[120]"></a>__rt_entry_postsh_1</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, rtentry2.o(.ARM.Collect$$rtentry$$00000009))
 
 <P><STRONG><a name="[71]"></a>__rt_entry_main</STRONG> (Thumb, 0 bytes, Stack size unknown bytes, rtentry2.o(.ARM.Collect$$rtentry$$0000000D))
-<BR><BR>[Stack]<UL><LI>Max Depth = 944 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 952 + Unknown Stack Size
 <LI>Call Chain = __rt_entry_main &rArr; main &rArr; wav_play &rArr; f_open &rArr; follow_path &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; disk_write &rArr; SD_WriteMultiBlocks &rArr; SD_LowLevel_DMA_TxConfig &rArr; DMA_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
@@ -792,7 +792,7 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Audio_MAL_Play
 </UL>
 
-<P><STRONG><a name="[a6]"></a>I2S_GPIO_Init</STRONG> (Thumb, 84 bytes, Stack size 16 bytes, stm32f4xx_spi.o(i.I2S_GPIO_Init))
+<P><STRONG><a name="[a6]"></a>I2S_GPIO_Init</STRONG> (Thumb, 126 bytes, Stack size 16 bytes, stm32f4xx_spi.o(i.I2S_GPIO_Init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 36<LI>Call Chain = I2S_GPIO_Init &rArr; GPIO_PinAFConfig
 </UL>
 <BR>[Calls]<UL><LI><a href="#[91]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_PinAFConfig
@@ -1469,7 +1469,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[72]"></a>main</STRONG> (Thumb, 44 bytes, Stack size 0 bytes, main.o(i.main))
-<BR><BR>[Stack]<UL><LI>Max Depth = 944 + Unknown Stack Size
+<BR><BR>[Stack]<UL><LI>Max Depth = 952 + Unknown Stack Size
 <LI>Call Chain = main &rArr; wav_play &rArr; f_open &rArr; follow_path &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; disk_write &rArr; SD_WriteMultiBlocks &rArr; SD_LowLevel_DMA_TxConfig &rArr; DMA_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[f6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wm_8731_init
@@ -1509,8 +1509,8 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[f7]"></a>wav_play</STRONG> (Thumb, 376 bytes, Stack size 568 bytes, wavplay.o(i.wav_play))
-<BR><BR>[Stack]<UL><LI>Max Depth = 944 + Unknown Stack Size
+<P><STRONG><a name="[f7]"></a>wav_play</STRONG> (Thumb, 388 bytes, Stack size 576 bytes, wavplay.o(i.wav_play))
+<BR><BR>[Stack]<UL><LI>Max Depth = 952 + Unknown Stack Size
 <LI>Call Chain = wav_play &rArr; f_open &rArr; follow_path &rArr; dir_find &rArr; dir_next &rArr; create_chain &rArr; put_fat &rArr; move_window &rArr; disk_write &rArr; SD_WriteMultiBlocks &rArr; SD_LowLevel_DMA_TxConfig &rArr; DMA_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[f1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;f_read
@@ -1535,7 +1535,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[f6]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;wm_8731_init
 </UL>
 
-<P><STRONG><a name="[f6]"></a>wm_8731_init</STRONG> (Thumb, 120 bytes, Stack size 8 bytes, wm8731.o(i.wm_8731_init))
+<P><STRONG><a name="[f6]"></a>wm_8731_init</STRONG> (Thumb, 104 bytes, Stack size 8 bytes, wm8731.o(i.wm_8731_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = wm_8731_init &rArr; wm_spi_init &rArr; GPIO_PinAFConfig
 </UL>
 <BR>[Calls]<UL><LI><a href="#[fc]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;write_register

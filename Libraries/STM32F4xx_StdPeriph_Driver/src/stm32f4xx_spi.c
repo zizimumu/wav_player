@@ -1339,7 +1339,7 @@ void I2S_GPIO_Init(void)
   	GPIO_PinAFConfig(GPIOB, GPIO_PinSource13, GPIO_AF_SPI2);
   	GPIO_PinAFConfig(GPIOB, GPIO_PinSource15, GPIO_AF_SPI2);
 
-/* mclk config
+// mclk config
   	GPIO_InitStructure.GPIO_Pin = GPIO_Pin_6; 
   	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
   	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
@@ -1347,7 +1347,7 @@ void I2S_GPIO_Init(void)
   	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
   	GPIO_Init(GPIOC, &GPIO_InitStructure);   
   	GPIO_PinAFConfig(GPIOC, GPIO_PinSource6, GPIO_AF_SPI2); 
-  */
+
 }
 
 void I2S_send_data(u16 byte)

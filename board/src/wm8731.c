@@ -99,6 +99,24 @@ void wm_spi_init(void)
   	SPI_Cmd(SPI1, ENABLE);
 }
 
+
+#define CODEC_DATA_FORTMAT_DSP 3
+#define CODEC_DATA_FORTMAT_I2S 2
+#define CODEC_DATA_FORTMAT_MSB_L 1
+#define CODEC_DATA_FORTMAT_MSB_R 0
+
+#define CODEC_DATA_LENGTH_32 3
+#define CODEC_DATA_LENGTH_24 2
+#define CODEC_DATA_LENGTH_20 1
+#define CODEC_DATA_LENGTH_16 0
+
+#define CODEC_MODEL_SLAVE  0
+#define CODEC_MODEL_MAST 1
+
+
+
+
+
 void wm_8731_init(void )
 {
 	wm_spi_init();
@@ -110,14 +128,14 @@ void wm_8731_init(void )
 	write_register(0x09,0x00);		//inactive
 	delay_ms(1);
 	
-	write_register(0x00,0x17);		//left line in , vol	
-	write_register(0x01,0x17);		//left line in , vol	
-	write_register(0x02,0x63);		//Left Headphone Out: set left line out volume,the max is 0x7f
-	write_register(3, 0x63);  	// Right Headphone Out: set right line out volume,,the max is 0x7f
+	//write_register(0x00,0x17);		//left line in , vol	
+	//write_register(0x01,0x17);		//left line in , vol	
+	write_register(0x02,0x6a);		//Left Headphone Out: set left line out volume,the max is 0x7f
+	write_register(3, 0x6a);  	// Right Headphone Out: set right line out volume,,the max is 0x7f
 	write_register(4, 0x15); 		 // Analogue Audio Path Control: set mic as input and boost it, and enable dac 
-	write_register(5, 0x00);  	// Digital Audio Path Control: disable soft mute   
+	write_register(5, 0x00);  	// ADC ,DAC Digital Audio Path Control: disable soft mute   
 	write_register(6, 0);  			// power down control: power on all 
-	write_register(7, 0x01);  	// 0x01:MSB,left,iwl=16-bits, Enable slave Mode;0x09 : MSB,left,24bit
-	write_register(8, 0x02);  	// Normal, Base OVer-Sampleing Rate 384 fs (BOSR=1) 
+	write_register(7, CODEC_DATA_FORTMAT_MSB_L | (CODEC_DATA_LENGTH_16 <<2) );  	// 0x01:MSB,left,iwl=16-bits, Enable slave Mode;0x09 : MSB,left,24bit
+	write_register(8, 0x00);  	// Normal, Base OVer-Sampleing Rate 384 fs (BOSR=1) 
 	write_register(9, 0x01);  	// active interface
 }

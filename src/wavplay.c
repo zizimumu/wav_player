@@ -44,17 +44,23 @@ void wav_play(void)
 
 	
 	rt = f_open(&gFile, "0:/valder.wav" , FA_READ);
-	if(rt != FR_OK)
+	if(rt != FR_OK){
 		printf("open file error %d \r\n",rt) ;
+        goto err;
+    }
 
 	rt = f_read(&gFile, gAudio_buff, 1024, &BytesRead);
-	if(rt != FR_OK)
+	if(rt != FR_OK){
 		printf("read file error %d \r\n",rt) ;
+        goto err;
+
+    }
 	
 	if(WaveParsing(gAudio_buff) )
 		printf("wav parsing error\r\n");
 	else
-		printf("wav parsing ok,sample rate is %d, data sieze is %x\r\n",WAVE_Format.SampleRate,WAVE_Format.DataSize);
+		printf("wav parsing ok,sample rate %d\r\n data sieze%x\r\n ByteRate %d\r\n  NumChannels %d\r\n  BitsPerSample %d\r\n",\
+		    WAVE_Format.SampleRate,WAVE_Format.DataSize,WAVE_Format.ByteRate,WAVE_Format.NumChannels,WAVE_Format.BitsPerSample);
 
   	AUDIO_Init(WAVE_Format.SampleRate);
 	
@@ -108,6 +114,9 @@ void wav_play(void)
 		}
 	}
 
+
+    err:
+        return ;
 }	
 //DMA¥´ÀÕ≈‰÷√
 void Audio_DMA_Init(void)  
