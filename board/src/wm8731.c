@@ -1,6 +1,7 @@
 #include "wm8731.h"
 #include "delay.h"
 
+#include <stdio.h>
 #define CLK_HIGH()  	GPIO_SetBits(GPIOA,GPIO_Pin_5)
 #define CLK_LOW()  		GPIO_ResetBits(GPIOA,GPIO_Pin_5)
 
@@ -114,11 +115,58 @@ void wm_spi_init(void)
 #define CODEC_MODEL_MAST 1
 
 
+#define USE_256_FS_SAMPLE
+#ifdef USE_256_FS_SAMPLE 
+#define CODEC_SMAPLE_FMT_48K  0
+#define CODEC_SMAPLE_FMT_96K 0x0f
+#define CODEC_SMAPLE_FMT_44_1K 0x10
+#define CODEC_SMAPLE_FMT_32K 0x0c
+#else // 384 fs
+#define CODEC_SMAPLE_FMT_48K  0x01
+#define CODEC_SMAPLE_FMT_96K 0x0f
+#define CODEC_SMAPLE_FMT_44_1K 0x11
+#define CODEC_SMAPLE_FMT_32K 0x0d
+#endif
 
 
-
-void wm_8731_init(void )
+void wm_8731_init(u32 sample,u32 frame_bits )
 {
+    u16 date_len = 0;
+    u16 samp_fmt= 0;
+
+    switch(frame_bits){
+        case 32 :
+            date_len = CODEC_DATA_LENGTH_32;
+            break;
+        case 24 :
+            date_len = CODEC_DATA_LENGTH_24;
+            break;
+        case 16 :
+            date_len = CODEC_DATA_LENGTH_16;
+            break;
+
+         default :
+            printf("err frame bit frame_bits\r\n",frame_bits);
+            break;
+    };
+    switch(sample){
+        case 96000 :
+            samp_fmt = CODEC_SMAPLE_FMT_96K;
+            break;
+        case 48000 :
+            samp_fmt = CODEC_SMAPLE_FMT_48K;
+            break;
+        case 32000 :
+            samp_fmt = CODEC_SMAPLE_FMT_32K;
+            break;
+	case 44100 :
+		samp_fmt = CODEC_SMAPLE_FMT_44_1K;
+		break;
+
+         default :
+            printf("sample err %d\r\n",sample);
+            break;
+    };    
 	wm_spi_init();
 	wm8731_gpio_init();
 	
@@ -135,7 +183,9 @@ void wm_8731_init(void )
 	write_register(4, 0x15); 		 // Analogue Audio Path Control: set mic as input and boost it, and enable dac 
 	write_register(5, 0x00);  	// ADC ,DAC Digital Audio Path Control: disable soft mute   
 	write_register(6, 0);  			// power down control: power on all 
-	write_register(7, CODEC_DATA_FORTMAT_MSB_L | (CODEC_DATA_LENGTH_16 <<2) );  	// 0x01:MSB,left,iwl=16-bits, Enable slave Mode;0x09 : MSB,left,24bit
-	write_register(8, 0x00);  	// Normal, Base OVer-Sampleing Rate 384 fs (BOSR=1) 
+	write_register(7, CODEC_DATA_FORTMAT_MSB_L | (date_len <<2) );  	// 0x01:MSB,left,iwl=16-bits, Enable slave Mode;0x09 : MSB,left,24bit
+	
+	write_register(8, samp_fmt << 1);  	// Normal, Base OVer-Sampleing Rate 384 fs (BOSR=1) 
+	
 	write_register(9, 0x01);  	// active interface
 }

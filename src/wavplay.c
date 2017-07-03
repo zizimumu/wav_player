@@ -1,13 +1,14 @@
 #include "wavplay.h"
 #include "ff.h"
 #include "stdio.h"
-
+#include "wm8731.h"
 #define I2S_ENABLE_MASK      0x0400
 
 volatile u8 gHalf_dma_iflag = 0;
 volatile u8 gComp_dma_iflag = 0;
 
-u8 gAudio_buff[2048]={0};
+#define AUDIO_BUFF_SIZE (1024*8)
+u8 gAudio_buff[AUDIO_BUFF_SIZE];
 DMA_InitTypeDef DMA_InitStructure;      
 FIL gFile;
 __IO u32 gReadLen=0;
@@ -17,10 +18,10 @@ __IO u32 gReadLen=0;
 WAVE_TypeDef WAVE_Format;
 
 
-void AUDIO_Init(u32 audio_sample)
+void AUDIO_Init(u32 audio_sample,u32 frame_bit)
 {
-	I2S_user_Init(audio_sample);
-	Audio_DMA_Init();	
+	I2S_user_Init(audio_sample,frame_bit);
+	Audio_DMA_Init(frame_bit);	
 }
 
  void AUDIO_TransferComplete(void )
@@ -43,7 +44,7 @@ void wav_play(void)
   	f_mount(0, &fatfs);
 
 	
-	rt = f_open(&gFile, "0:/valder.wav" , FA_READ);
+	rt = f_open(&gFile, "0:/hongyan.wav" , FA_READ);
 	if(rt != FR_OK){
 		printf("open file error %d \r\n",rt) ;
         goto err;
@@ -62,14 +63,19 @@ void wav_play(void)
 		printf("wav parsing ok,sample rate %d\r\n data sieze%x\r\n ByteRate %d\r\n  NumChannels %d\r\n  BitsPerSample %d\r\n",\
 		    WAVE_Format.SampleRate,WAVE_Format.DataSize,WAVE_Format.ByteRate,WAVE_Format.NumChannels,WAVE_Format.BitsPerSample);
 
-  	AUDIO_Init(WAVE_Format.SampleRate);
+
+
+    wm_8731_init(WAVE_Format.SampleRate,WAVE_Format.BitsPerSample);
+    printf("inited the wm8731\r\n");
+
+  	AUDIO_Init(WAVE_Format.SampleRate,WAVE_Format.BitsPerSample);
 	
   	f_lseek(&gFile, sizeof(WAVE_Format));								//ignore head file
 
-	if(WAVE_Format.DataSize < 1024*2)
+	if(WAVE_Format.DataSize < AUDIO_BUFF_SIZE)
 		data_len = WAVE_Format.DataSize;
 	else 
-		data_len = 1024*2;
+		data_len = AUDIO_BUFF_SIZE;
 
 	gReadLen = 0;
 	gReadLen += data_len;
@@ -80,17 +86,20 @@ void wav_play(void)
 		if(gHalf_dma_iflag){
 			gHalf_dma_iflag = 0;
 			if(gReadLen < WAVE_Format.DataSize){
-				if(WAVE_Format.DataSize - gReadLen < 1024){	
+				if(WAVE_Format.DataSize - gReadLen < AUDIO_BUFF_SIZE/2){	
 					f_read(&gFile, gAudio_buff, WAVE_Format.DataSize - gReadLen, &BytesRead);
 					gReadLen = WAVE_Format.DataSize;
 				}
 				else {
-					rt = f_read(&gFile, gAudio_buff, 1024, &BytesRead);
-					gReadLen += 1024;
+					rt = f_read(&gFile, gAudio_buff, AUDIO_BUFF_SIZE/2, &BytesRead);
+					gReadLen += (AUDIO_BUFF_SIZE/2);
 				}
 			}
-			else
-				AUDIO_TransferComplete(); 			
+			else{
+				AUDIO_TransferComplete(); 
+				//break;
+
+			}			
 		}
 
 		else if(gComp_dma_iflag){
@@ -98,17 +107,18 @@ void wav_play(void)
 			if (gReadLen < WAVE_Format.DataSize){											//check out for file end
 				//while (DMA_GetCmdStatus(DMA1_Stream4) != DISABLE);//wait for DMA disabled 	
 					  
-				if(WAVE_Format.DataSize - gReadLen < 1024){ 
-					rt = f_read(&gFile, gAudio_buff+1024, WAVE_Format.DataSize - gReadLen, &BytesRead);
+				if(WAVE_Format.DataSize - gReadLen < AUDIO_BUFF_SIZE/2){ 
+					rt = f_read(&gFile, gAudio_buff+AUDIO_BUFF_SIZE/2, WAVE_Format.DataSize - gReadLen, &BytesRead);
 					gReadLen = WAVE_Format.DataSize;
 				}
 				else{
-					rt = f_read(&gFile, gAudio_buff+1024, 1024, &BytesRead);
-					gReadLen += 1024;
+					rt = f_read(&gFile, gAudio_buff+AUDIO_BUFF_SIZE/2, AUDIO_BUFF_SIZE/2, &BytesRead);
+					gReadLen += (AUDIO_BUFF_SIZE/2);
 				}
 			}
 			else{
 				AUDIO_TransferComplete();		
+				//break;
 			}
 
 		}
@@ -119,9 +129,24 @@ void wav_play(void)
         return ;
 }	
 //DMA´«ËÍÅäÖÃ
-void Audio_DMA_Init(void)  
+void Audio_DMA_Init(u32 frame_bit)  
 { 
   	NVIC_InitTypeDef NVIC_InitStructure;
+	u32 p_size,m_size;
+
+	if(frame_bit == 16){
+		m_size = DMA_MemoryDataSize_HalfWord;
+        p_size = DMA_PeripheralDataSize_HalfWord;
+     }
+	else if(frame_bit == 32){
+		m_size = DMA_MemoryDataSize_Word;
+        p_size = DMA_PeripheralDataSize_Word;
+
+    }
+	else{
+		printf("dma init err\r\n");
+		return ;
+	}
   	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA1, ENABLE); 
   	DMA_Cmd(DMA1_Stream4, DISABLE);
   	DMA_DeInit(DMA1_Stream4);
@@ -132,8 +157,8 @@ void Audio_DMA_Init(void)
   	DMA_InitStructure.DMA_BufferSize = (uint32_t)0xFFFE;
   	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
   	DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
-  	DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
-  	DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord; 
+  	DMA_InitStructure.DMA_PeripheralDataSize = p_size;
+  	DMA_InitStructure.DMA_MemoryDataSize = m_size; 
   	DMA_InitStructure.DMA_Mode = DMA_Mode_Circular; 
   	DMA_InitStructure.DMA_Priority = DMA_Priority_High;
   	DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable;         
@@ -166,7 +191,7 @@ uint32_t AUDIO_Play(u16* pBuffer, u32 Size)
 void Audio_MAL_Play(u32 Addr, u32 Size)
 {         
   	DMA_InitStructure.DMA_Memory0BaseAddr=(uint32_t)Addr;
-  	DMA_InitStructure.DMA_BufferSize=(uint32_t)Size/2;
+  	DMA_InitStructure.DMA_BufferSize=(uint32_t)Size/(WAVE_Format.BitsPerSample/8);
   	DMA_Init(DMA1_Stream4,&DMA_InitStructure);
   	DMA_Cmd(DMA1_Stream4,ENABLE); 
   	if ((SPI2->I2SCFGR & I2S_ENABLE_MASK)==0)I2S_Cmd(SPI2,ENABLE);

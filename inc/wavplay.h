@@ -45,7 +45,7 @@ void wav_play(void);
 
 u8 WaveParsing(const u8 * buf);
 u32 ReadUnit(u8 *buffer, u8 idx, u8 NbrOfBytes, Endianness BytesFormat);
-void Audio_DMA_Init(void)  ;
+void Audio_DMA_Init(u32 frame_bit)  ;
 void Audio_MAL_Play(u32 Addr, u32 Size);
 void audio_irq_handle(void);
 

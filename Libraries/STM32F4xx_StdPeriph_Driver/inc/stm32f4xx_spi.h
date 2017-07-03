@@ -526,7 +526,7 @@ u8 SPI1_RWByte(u8 byte);
 void SPI1_user_Init(void);
 u16 SPI1_RW_16bit(u16 byte);
 void I2S_send_data(u16 byte);
-void I2S_user_Init(u32 sample );
+void I2S_user_Init(u32 sample ,u32 frame_bits);
 
 /********************  emy add end ****************/
 

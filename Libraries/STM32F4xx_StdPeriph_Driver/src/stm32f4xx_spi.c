@@ -151,7 +151,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_spi.h"
 #include "stm32f4xx_rcc.h"
-
+#include <stdio.h>
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{
   */
@@ -384,7 +384,48 @@ void I2S_Init(SPI_TypeDef* SPIx, I2S_InitTypeDef* I2S_InitStruct)
     {
       RCC->CFGR &= ~(uint32_t)RCC_CFGR_I2SSRC;
     }    
-    
+
+
+    //just for mclk enable when pllm_cvo === 1Mhz
+    switch(I2S_InitStruct->I2S_AudioFreq){
+        case 48000 :
+            plln = 258;
+            pllr = 3;
+            break;
+        case 44100 :
+            plln = 271;
+            pllr = 2;            
+            break;
+        case 32000:
+            plln = 213;
+            pllr = 2;             
+            break;
+
+        default :
+            plln = 258;
+            pllr = 3;
+
+            break;
+
+    };
+        RCC->CR &= ~((uint32_t)RCC_CR_PLLI2SON);
+      RCC->CR &= ((uint32_t)RCC_CR_PLLI2SON);
+      /* PLLI2S clock used as I2S clock source */
+      RCC->CFGR &= ~RCC_CFGR_I2SSRC;
+
+      /* Configure PLLI2S */
+      RCC->PLLI2SCFGR = (plln << 6) | (pllr << 28);
+
+      /* Enable PLLI2S */
+      RCC->CR |= ((uint32_t)RCC_CR_PLLI2SON);
+
+      /* Wait till PLLI2S is ready */
+      while((RCC->CR & RCC_CR_PLLI2SRDY) == 0)
+      {
+      }
+
+
+  
     /* Get the PLLI2SN value */
     plln = (uint32_t)(((RCC->PLLI2SCFGR & RCC_PLLI2SCFGR_PLLI2SN) >> 6) & \
                       (RCC_PLLI2SCFGR_PLLI2SN >> 6));
@@ -433,6 +474,7 @@ void I2S_Init(SPI_TypeDef* SPIx, I2S_InitTypeDef* I2S_InitStruct)
     i2sodd = 0;
   }
 
+  printf("I2S config div = %d,odd =%d ,actal clock is %d\r\n",i2sdiv,i2sodd,(int)( ((float)(i2sclk)/(2*i2sdiv + i2sodd) )/256.0)  );
   /* Write to SPIx I2SPR register the computed value */
   SPIx->I2SPR = (uint16_t)((uint16_t)i2sdiv | (uint16_t)(i2sodd | (uint16_t)I2S_InitStruct->I2S_MCLKOutput));
  
@@ -1358,18 +1400,34 @@ void I2S_send_data(u16 byte)
  	//return(SPI2->DR);
 }
 
-void I2S_user_Init(u32 sample )
+void I2S_user_Init(u32 sample ,u32 frame_bits)
 {
   	I2S_InitTypeDef I2S_InitStructure;
-
+	u16 data_fmt= 0;
 
 	I2S_GPIO_Init();
+
+
+
+	switch(frame_bits){
+	    case 32 :
+	        data_fmt = I2S_DataFormat_32b;
+	        break;
+	    case 16 :
+	        data_fmt = I2S_DataFormat_16b;
+	        break;
+
+	     default :
+	        printf("I2S_user_Init: err frame bit frame_bits %d\r\n",frame_bits);
+	        break;
+	};
+	
 
 	
   	RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, ENABLE);
   	SPI_I2S_DeInit(SPI2);
   	I2S_InitStructure.I2S_Standard = I2S_Standard_MSB;
-  	I2S_InitStructure.I2S_DataFormat = I2S_DataFormat_16b;
+  	I2S_InitStructure.I2S_DataFormat = data_fmt;
   	I2S_InitStructure.I2S_CPOL = I2S_CPOL_Low;
   	I2S_InitStructure.I2S_Mode = I2S_Mode_MasterTx;
   	I2S_InitStructure.I2S_MCLKOutput = I2S_MCLKOutput_Enable; 

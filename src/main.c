@@ -39,7 +39,7 @@ int main(void)
 
 	s_putstring("starting the test................\r\n");
 //	main_loop();
-	wm_8731_init();
+//	wm_8731_init();
 
 
 
