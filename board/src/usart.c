@@ -134,6 +134,20 @@ char s_getchar(void)
 	return (char)(USART1->DR &0x00ff) ;
 	
 }
+
+int uart_data_valid(void)
+{
+	int ret = ( USART_GetFlagStatus(USART1, USART_FLAG_RXNE) != RESET ) ;
+
+	return ret;
+	
+}
+u8 uart_read_char(void)
+{
+	return (char)(USART1->DR &0x00ff) ;
+}
+
+
 void s_putchar(char data)
 {
   	USART_SendData(USART1, data);
@@ -150,21 +164,38 @@ void s_putstring(char * str)
 }
 
 
+
+
 #if 1
-#pragma import(__use_no_semihosting)                              
+#pragma import(__use_no_semihosting) 
+
 struct __FILE 
 { 
 	int handle; 
 }; 
-FILE __stdout;         
+FILE __stdout;  
+FILE __stdin;  
+
+      
 _sys_exit(int x) 
 { 
 	x = x; 
 } 
+
+#endif
 int fputc(int ch, FILE *f)
 {
   	USART_SendData(USART1, (u8) ch);
   	while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);
   	return ch;
 }
-#endif
+
+int fgetc(FILE *stream)
+{
+	u8 ret = 0;
+	ret = s_getchar();
+	s_putchar(ret);
+	return ret;
+}
+
+

@@ -550,6 +550,11 @@
               <FileType>1</FileType>
               <FilePath>..\Third_Party\fat_fs\src\ff.c</FilePath>
             </File>
+            <File>
+              <FileName>ccsbcs.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Third_Party\fat_fs\src\option\ccsbcs.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

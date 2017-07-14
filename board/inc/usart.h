@@ -10,6 +10,9 @@ void STM32_dma_Print(char *pBuf);
 void s_putstring(char * str);
 char s_getchar(void);
 void s_putchar(char data);
+int uart_data_valid(void);
+u8 uart_read_char(void);
+
 
 #endif
 

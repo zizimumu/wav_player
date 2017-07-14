@@ -129,6 +129,15 @@ void wm_spi_init(void)
 #endif
 
 
+void wm_8731_reset(void)
+{
+	write_register(0x0f,0x00);		//reset all
+
+	delay_ms(1);
+	write_register(0x09,0x00);		//inactive
+
+}
+
 void wm_8731_init(u32 sample,u32 frame_bits )
 {
     u16 date_len = 0;
@@ -146,7 +155,7 @@ void wm_8731_init(u32 sample,u32 frame_bits )
             break;
 
          default :
-            printf("err frame bit frame_bits\r\n",frame_bits);
+            printf("err frame bit frame_bits\r\n");
             break;
     };
     switch(sample){
@@ -178,8 +187,8 @@ void wm_8731_init(u32 sample,u32 frame_bits )
 	
 	//write_register(0x00,0x17);		//left line in , vol	
 	//write_register(0x01,0x17);		//left line in , vol	
-	write_register(0x02,0x6a);		//Left Headphone Out: set left line out volume,the max is 0x7f
-	write_register(3, 0x6a);  	// Right Headphone Out: set right line out volume,,the max is 0x7f
+	write_register(2, 0x70);		//Left Headphone Out: set left line out volume,the max is 0x7f
+	write_register(3, 0x70);  	// Right Headphone Out: set right line out volume,,the max is 0x7f
 	write_register(4, 0x15); 		 // Analogue Audio Path Control: set mic as input and boost it, and enable dac 
 	write_register(5, 0x00);  	// ADC ,DAC Digital Audio Path Control: disable soft mute   
 	write_register(6, 0);  			// power down control: power on all 
