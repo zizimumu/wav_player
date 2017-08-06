@@ -3,14 +3,16 @@
 #include "stdio.h"
 #include "wm8731.h"
 #include "usart.h"
+#include "delay.h"
 #include <stdio.h>
 #include <string.h>
 #define I2S_ENABLE_MASK      0x0400
 
 volatile u8 gHalf_dma_iflag = 0;
 volatile u8 gComp_dma_iflag = 0;
+u32 wr_pt = 0;
 
-#define AUDIO_BUFF_SIZE (1024*8)
+#define AUDIO_BUFF_SIZE (1024*8)  // 512*
 u8 gAudio_buff[AUDIO_BUFF_SIZE];
 DMA_InitTypeDef DMA_InitStructure;      
 FIL gFile;
@@ -74,9 +76,18 @@ WAVE_TypeDef WAVE_Format;
 int get_stop(void)
 {
 	int ret = 0;
+    u8 val = 0;
 	if(uart_data_valid()){
-		if(uart_read_char() == 0x03) // ctr + c
+        val = uart_read_char();
+		if(val == 0x03) // ctr + c
 			ret = 1;
+
+        if(val == 'u'){ // up key
+            wm_8731_vol_up();
+        }
+        else if(val == 'd'){// down key
+            wm_8731_vol_down();
+        }
 	}
 	return ret ;
 }
@@ -120,7 +131,39 @@ int get_user_choice()
 	printf("chosing %d\r\n",input);
 	return input;
 }
- 
+
+#define DAM_MIN_GEP 3
+void wait_dma_done(void)
+{
+	u32 dma,remaind_sz;
+	//u8 *r_packet;
+	int pre,next;
+	
+	remaind_sz = (AUDIO_BUFF_SIZE  - wr_pt)/(WAVE_Format.BitsPerSample/8);
+
+	pre = remaind_sz - DAM_MIN_GEP;
+	next = remaind_sz + DAM_MIN_GEP;
+
+	if(pre < 0)
+		pre = 0;
+	if(next > AUDIO_BUFF_SIZE/(WAVE_Format.BitsPerSample/8) )
+		next = AUDIO_BUFF_SIZE/(WAVE_Format.BitsPerSample/8);
+
+	while(1){
+		dma = DMA_GetCurrDataCounter(DMA1_Stream4) ;
+		if(dma >= pre && dma <= next)
+			break;
+	}
+
+    memset(wr_pt+gAudio_buff,0,AUDIO_BUFF_SIZE-wr_pt);
+    memset(gAudio_buff,0,wr_pt);
+    delay_ms(500);
+
+    
+    
+}
+
+
 void wav_play(void)
 {
 	FATFS fatfs;            
@@ -130,17 +173,15 @@ void wav_play(void)
 	char path[100];
 	char *audio_fs;
 	int audio_num = 1;
+    u32 valid;
 
-	//printf("please input any thing to start the program \r\n");
-	//scanf("%d",&input);
-    //
-	//printf("starting \r\n");
 
   	f_mount(0, &fatfs);
 
 	scan_files(ROOT_DIR,".wav",0);
 play :	
 	memset(path,0,sizeof(path));
+    memset(gAudio_buff,0,sizeof(gAudio_buff));
 	audio_fs = scan_files(ROOT_DIR,".wav",audio_num);
 
 	if(audio_fs == NULL){
@@ -180,63 +221,49 @@ play :
 	else 
 		data_len = AUDIO_BUFF_SIZE;
 
-	gReadLen = 0;
-	gReadLen += data_len;
+	
+	//wr_pt += data_len;
   	f_read(&gFile, gAudio_buff, data_len, &BytesRead); 
   	Audio_MAL_Play((u32)gAudio_buff, data_len);
+   // delay_ms(500);
+
+    //
+
+    wr_pt = data_len;
+    if(wr_pt >= AUDIO_BUFF_SIZE)
+        wr_pt = 0;
 
 	while(1){
 		if(get_stop()){
 			printf("ctrl + c to stop \r\n");
+            wait_dma_done();
 			AUDIO_TransferComplete();
 			audio_num = get_user_choice();
 			goto play;
 		}
-			
-		if(gHalf_dma_iflag){
-			gHalf_dma_iflag = 0;
-			if(gReadLen < WAVE_Format.DataSize){
-				if(WAVE_Format.DataSize - gReadLen < AUDIO_BUFF_SIZE/2){	
-					f_read(&gFile, gAudio_buff, WAVE_Format.DataSize - gReadLen, &BytesRead);
-					gReadLen = WAVE_Format.DataSize;
-				}
-				else {
-					rt = f_read(&gFile, gAudio_buff, AUDIO_BUFF_SIZE/2, &BytesRead);
-					gReadLen += (AUDIO_BUFF_SIZE/2);
-				}
-			}
-			else{
+
+        valid = AUDIO_BUFF_SIZE - DMA_GetCurrDataCounter(DMA1_Stream4)*(WAVE_Format.BitsPerSample/8);
+        if(valid >= wr_pt)
+            valid = valid - wr_pt;
+        else
+            valid = AUDIO_BUFF_SIZE - (wr_pt - valid);
+
+        if(valid >= 1024){
+
+            rt = f_read(&gFile, gAudio_buff + wr_pt,512, &BytesRead);
+            wr_pt += BytesRead;
+            if(wr_pt >= AUDIO_BUFF_SIZE)
+                wr_pt = 0;
+
+            if(BytesRead < 512){
+                wait_dma_done();
 				AUDIO_TransferComplete(); 
 				audio_num++;
 				goto play;
+            }
+        }
 
-			}			
-		}
-
-		else if(gComp_dma_iflag){
-			gComp_dma_iflag = 0;
-			if (gReadLen < WAVE_Format.DataSize){											//check out for file end
-				//while (DMA_GetCmdStatus(DMA1_Stream4) != DISABLE);//wait for DMA disabled 	
-					  
-				if(WAVE_Format.DataSize - gReadLen < AUDIO_BUFF_SIZE/2){ 
-					rt = f_read(&gFile, gAudio_buff+AUDIO_BUFF_SIZE/2, WAVE_Format.DataSize - gReadLen, &BytesRead);
-					gReadLen = WAVE_Format.DataSize;
-				}
-				else{
-					rt = f_read(&gFile, gAudio_buff+AUDIO_BUFF_SIZE/2, AUDIO_BUFF_SIZE/2, &BytesRead);
-					gReadLen += (AUDIO_BUFF_SIZE/2);
-				}
-			}
-			else{
-				AUDIO_TransferComplete();		
-				audio_num++;
-				goto play;
-			}
-
-		}
-	}
-
-
+      }
     err:
         return ;
 }	

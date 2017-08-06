@@ -128,6 +128,7 @@ void wm_spi_init(void)
 #define CODEC_SMAPLE_FMT_32K 0x0d
 #endif
 
+static u8 wm_vol = 0x65;
 
 void wm_8731_reset(void)
 {
@@ -137,6 +138,43 @@ void wm_8731_reset(void)
 	write_register(0x09,0x00);		//inactive
 
 }
+
+
+void wm_8731_vol_down(void)
+{
+    wm_vol -= 5;
+
+    write_register(2, wm_vol);
+    write_register(3, wm_vol);
+
+    printf("vol down 0x%x\r\n",wm_vol);
+}
+void wm_8731_vol_up(void)
+{
+    wm_vol += 5;
+
+    write_register(2, wm_vol);
+    write_register(3, wm_vol);   
+
+    printf("vol up 0x%x\r\n",wm_vol);
+}
+void delay_us_s(u32 nus)
+{	
+	u32 i,j;
+	for(j=0;j<nus;j++){
+		 i = 168;
+		while(i--);
+	}
+}
+
+void delay_ms_s(u16 delay)
+{
+	u32 i;
+	for(i=0;i<delay;i++)
+		delay_us_s(1000);
+	
+}
+
 
 void wm_8731_init(u32 sample,u32 frame_bits )
 {
@@ -181,14 +219,14 @@ void wm_8731_init(u32 sample,u32 frame_bits )
 	
 	write_register(0x0f,0x00);		//reset all
 
-	delay_ms(1);
+	delay_ms_s(1);
 	write_register(0x09,0x00);		//inactive
-	delay_ms(1);
+	delay_ms_s(1);
 	
 	//write_register(0x00,0x17);		//left line in , vol	
 	//write_register(0x01,0x17);		//left line in , vol	
-	write_register(2, 0x70);		//Left Headphone Out: set left line out volume,the max is 0x7f
-	write_register(3, 0x70);  	// Right Headphone Out: set right line out volume,,the max is 0x7f
+	write_register(2, wm_vol);		//Left Headphone Out: set left line out volume,the max is 0x7f
+	write_register(3, wm_vol);  	// Right Headphone Out: set right line out volume,,the max is 0x7f
 	write_register(4, 0x15); 		 // Analogue Audio Path Control: set mic as input and boost it, and enable dac 
 	write_register(5, 0x00);  	// ADC ,DAC Digital Audio Path Control: disable soft mute   
 	write_register(6, 0);  			// power down control: power on all 
