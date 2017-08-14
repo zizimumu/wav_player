@@ -1376,7 +1376,7 @@ void I2S_GPIO_Init(void)
   	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
   	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+  	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
   	GPIO_Init(GPIOB, &GPIO_InitStructure);
   	GPIO_PinAFConfig(GPIOB, GPIO_PinSource12, GPIO_AF_SPI2);  
   	GPIO_PinAFConfig(GPIOB, GPIO_PinSource13, GPIO_AF_SPI2);
@@ -1387,7 +1387,7 @@ void I2S_GPIO_Init(void)
   	GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
   	GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+  	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
   	GPIO_Init(GPIOC, &GPIO_InitStructure);   
   	GPIO_PinAFConfig(GPIOC, GPIO_PinSource6, GPIO_AF_SPI2); 
 

@@ -97,8 +97,97 @@ void AUDIO_Init(u32 audio_sample,u32 frame_bit)
 	I2S_user_Init(audio_sample,frame_bit);
 	Audio_DMA_Init(frame_bit);	
 
-    wm_8731_init(audio_sample,frame_bit);
+    	wm_8731_init(audio_sample,frame_bit);
 }
+
+
+
+
+
+void I2S_DMAConfig_Rx(u32 buff_size,u32 buff_addr)
+{
+	//NVIC_InitTypeDef  NVIC_InitStructure;
+
+	RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_DMA1, ENABLE);
+
+	DMA_Cmd(DMA1_Stream3, DISABLE);
+	while(DMA_GetCmdStatus(DMA1_Stream3) != DISABLE);
+
+	DMA_DeInit(DMA1_Stream3);
+
+	DMA_InitStructure.DMA_Channel = DMA_Channel_0;
+	DMA_InitStructure.DMA_PeripheralBaseAddr = (uint32_t)&(SPI2->DR);
+	DMA_InitStructure.DMA_Memory0BaseAddr = (uint32_t)buff_addr; //接收数据的内存的地址
+	DMA_InitStructure.DMA_DIR = DMA_DIR_PeripheralToMemory;
+	DMA_InitStructure.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+	DMA_InitStructure.DMA_MemoryInc = DMA_MemoryInc_Enable;
+	DMA_InitStructure.DMA_PeripheralDataSize = DMA_PeripheralDataSize_HalfWord;
+	DMA_InitStructure.DMA_MemoryDataSize = DMA_MemoryDataSize_HalfWord;
+	DMA_InitStructure.DMA_BufferSize = buff_size/2; //单位为上面的DataSize
+	DMA_InitStructure.DMA_Mode = DMA_Mode_Circular;
+	DMA_InitStructure.DMA_Priority = DMA_Priority_High;
+	DMA_InitStructure.DMA_FIFOMode = DMA_FIFOMode_Disable;
+	DMA_InitStructure.DMA_FIFOThreshold = DMA_FIFOThreshold_Full;
+	DMA_InitStructure.DMA_MemoryBurst = DMA_MemoryBurst_Single;
+	DMA_InitStructure.DMA_PeripheralBurst = DMA_PeripheralBurst_Single;
+
+	/* Initiate DMA */
+	DMA_Init(DMA1_Stream3, &DMA_InitStructure);
+	//SPI_I2S_DMACmd(SPI2, SPI_I2S_DMAReq_Rx, ENABLE);
+
+}
+
+
+extern void I2S_GPIO_Init(void);
+
+void I2S_RXConfig(uint32_t Freq)
+{
+	I2S_InitTypeDef I2S_InitStructure;
+
+	I2S_GPIO_Init();
+	
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2, ENABLE);
+	/* Deinitialize SPI2 peripheral */
+	SPI_I2S_DeInit(SPI2);
+
+	/* I2S2 peripheral configuration */
+	I2S_InitStructure.I2S_Mode = I2S_Mode_MasterRx;
+	I2S_InitStructure.I2S_Standard = I2S_Standard_MSB;
+	I2S_InitStructure.I2S_DataFormat = I2S_DataFormat_16b;
+	I2S_InitStructure.I2S_CPOL = I2S_CPOL_Low;
+	I2S_InitStructure.I2S_AudioFreq = Freq;
+	I2S_InitStructure.I2S_MCLKOutput = I2S_MCLKOutput_Enable;
+	I2S_Init(SPI2, &I2S_InitStructure);
+
+
+}
+#define RX_BUFF_SIZE (80*1024)
+u8 rec_buff[RX_BUFF_SIZE];
+
+void record_init()
+{
+
+	wm_8731_record_init(48000,16);
+	I2S_RXConfig(48000);
+	I2S_DMAConfig_Rx(RX_BUFF_SIZE,(u32)rec_buff);
+
+}
+ void record_Start(void)
+ {
+	 DMA_Cmd(DMA1_Stream3, ENABLE);
+ 
+	 SPI_I2S_DMACmd(SPI2, SPI_I2S_DMAReq_Rx, ENABLE);
+	 I2S_Cmd(SPI2, ENABLE);
+ 
+ }
+
+ void record_Stop(void)
+ {
+	 DMA_Cmd(DMA1_Stream3, DISABLE);
+ 
+	 SPI_I2S_DMACmd(SPI2, SPI_I2S_DMAReq_Rx, DISABLE);
+	 I2S_Cmd(SPI2, DISABLE);
+ }
 
  void AUDIO_TransferComplete(void )
 {
@@ -267,6 +356,134 @@ play :
     err:
         return ;
 }	
+
+
+
+#define MIN_BLOCK 512
+void wav_record(void)
+{
+	FATFS fatfs;            
+	u32 data_len = 0,input;
+	UINT BytesRead = 0;	
+	FRESULT rt = FR_EXIST ;
+	char path[100];
+	char *audio_fs;
+	int audio_num = 1;
+    	u32 rd,wr,i,free,sz;
+	u32 f_sz = 0,block;
+
+	for(i=0;i<4096;i++)
+		rec_buff[i]=i;
+
+
+  	f_mount(0, &fatfs);
+	
+	rt = f_open(&gFile, "0:/test.bin", FA_CREATE_ALWAYS | FA_WRITE|FA_READ);
+	if(rt != FR_OK){
+		printf("open file error %d \r\n",rt) ;
+		return ;
+    	}
+
+
+#if 0
+	while(1){
+		rt = f_write(&gFile,rec_buff,512,&BytesRead);
+
+		if(BytesRead != 512)
+			printf("write data err %d,%d\r\n",BytesRead,rt);
+		
+		f_sz += 512;
+
+		if(f_sz >= 100*1024*1024){
+			f_close(&gFile);
+			printf("write done\r\n");
+			return ;
+
+		}
+
+	//
+	}
+#endif	
+
+
+	record_init();
+	record_Start();
+
+	rd = 0;
+	block = 0;
+	while(1){
+		if(get_stop()){
+			printf("ctrl + c to stop ,file size %d\r\n",f_sz);
+			record_Stop();
+			f_close(&gFile);
+
+			return ;
+		}	
+#if 0
+		wr = RX_BUFF_SIZE - DMA_GetCurrDataCounter(DMA1_Stream3)*2;
+		if(wr >= rd)
+			free = wr - rd;
+		else
+			free = RX_BUFF_SIZE - rd + wr;
+
+		if(free >= MIN_BLOCK){
+
+			if(RX_BUFF_SIZE - rd >= MIN_BLOCK){
+				rt = f_write(&gFile,rec_buff + rd,MIN_BLOCK,&BytesRead);
+				if(BytesRead !=MIN_BLOCK )
+					printf("write data err %d,%d\r\n",BytesRead,rt);
+				
+				rd += MIN_BLOCK;
+				if(rd >= RX_BUFF_SIZE)
+					rd = 0;
+
+			}
+			else{
+				sz = MIN_BLOCK - (RX_BUFF_SIZE - rd);
+				rt = f_write(&gFile,rec_buff + rd,RX_BUFF_SIZE - rd,&BytesRead);
+				if(BytesRead !=RX_BUFF_SIZE - rd )
+					printf("write data err a %d,%d\r\n",RX_BUFF_SIZE - rd,rt);
+								
+				rt = f_write(&gFile,rec_buff,sz,&BytesRead);
+				if(BytesRead !=sz )
+					printf("write data err a %d,%d\r\n",sz,rt);
+
+				rd = sz;
+			}
+			f_sz += MIN_BLOCK;
+				
+		}
+#else
+		
+		wr = RX_BUFF_SIZE - DMA_GetCurrDataCounter(DMA1_Stream3)*2;
+		if(wr >= RX_BUFF_SIZE/2 && block == 0){
+			block = 1;
+			rd = 0;
+			for(i=0;i<RX_BUFF_SIZE/2/512;i++){
+				rt = f_write(&gFile,rec_buff + rd,MIN_BLOCK,&BytesRead);
+				if(BytesRead !=MIN_BLOCK )
+					printf("write data err %d,%d\r\n",BytesRead,rt);
+				rd  += MIN_BLOCK;
+			}
+				
+		}
+
+		else if(wr < RX_BUFF_SIZE/2 && block == 1){
+			block = 0;
+			rd = 0;
+			for(i=0;i<RX_BUFF_SIZE/2/512;i++){
+				rt = f_write(&gFile,rec_buff +RX_BUFF_SIZE/2+ rd,MIN_BLOCK,&BytesRead);
+				if(BytesRead !=MIN_BLOCK )
+					printf("write data err %d,%d\r\n",BytesRead,rt);
+				rd  += MIN_BLOCK;
+			}
+		}
+#endif
+	}
+
+
+}	
+
 //DMA传送配置
 void Audio_DMA_Init(u32 frame_bit)  
 { 

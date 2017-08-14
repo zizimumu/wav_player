@@ -3,39 +3,545 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Project:</h2>
-C:\Users\emy\Desktop\STM32F407_for_testboard\proj\test.uvproj
-Project File Date:  07/14/2017
+F:\Demo_self\wav_player\proj\test.uvproj
+Project File Date:  08/10/2017
 
 <h2>Output:</h2>
-Load "C:\\Users\\emy\\Desktop\\STM32F407_for_testboard\\proj\\output\\test.axf" 
+Build target 'Target 1'
+assembling startup_stm32f4xx.s...
+compiling main.c...
+..\src\main.c(47): warning:  #223-D: function "wav_record" declared implicitly
+compiling stm32f4xx_it.c...
+compiling system_stm32f4xx.c...
+compiling myconfig.c...
+compiling led.c...
+compiling key.c...
+compiling delay.c...
+compiling timer.c...
+compiling usart.c...
+compiling wm8731.c...
+compiling wavplay.c...
+..\src\wavplay.c(30): warning:  #550-D: variable "i" was set but never used
+..\src\wavplay.c(113): error:  #20: identifier "CODEC_DATA_LENGTH_32" is undefined
+..\src\wavplay.c(116): error:  #20: identifier "CODEC_DATA_LENGTH_24" is undefined
+..\src\wavplay.c(119): error:  #20: identifier "CODEC_DATA_LENGTH_16" is undefined
+..\src\wavplay.c(128): error:  #20: identifier "CODEC_SMAPLE_FMT_96K" is undefined
+..\src\wavplay.c(131): error:  #20: identifier "CODEC_SMAPLE_FMT_48K" is undefined
+..\src\wavplay.c(134): error:  #20: identifier "CODEC_SMAPLE_FMT_32K" is undefined
+..\src\wavplay.c(137): error:  #20: identifier "CODEC_SMAPLE_FMT_44_1K" is undefined
+..\src\wavplay.c(145): warning:  #223-D: function "wm_spi_init" declared implicitly
+..\src\wavplay.c(146): warning:  #223-D: function "wm8731_gpio_init" declared implicitly
+..\src\wavplay.c(149): warning:  #223-D: function "write_register" declared implicitly
+..\src\wavplay.c(161): error:  #20: identifier "CODEC_DATA_FORTMAT_MSB_L" is undefined
+..\src\wavplay.c(208): warning:  #223-D: function "I2S_GPIO_Init" declared implicitly
+..\src\wavplay.c(231): error:  #20: identifier "RX_BUFF_SIZE" is undefined
+..\src\wavplay.c(231): error:  #20: identifier "IsocOutBuff" is undefined
+..\src\wavplay.c(301): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(408): warning:  #177-D: variable "data_len" was declared but never referenced
+..\src\wavplay.c(408): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(412): warning:  #177-D: variable "audio_fs" was declared but never referenced
+..\src\wavplay.c(413): warning:  #177-D: variable "audio_num" was declared but never referenced
+..\src\wavplay.c(414): warning:  #177-D: variable "valid" was declared but never referenced
+..\src\wavplay.c(512): warning:  #177-D: variable "NVIC_InitStructure" was declared but never referenced
+compiling sdio_sd.c...
+compiling misc.c...
+compiling stm32f4xx_gpio.c...
+compiling stm32f4xx_tim.c...
+compiling stm32f4xx_rcc.c...
+compiling stm32f4xx_exti.c...
+compiling stm32f4xx_syscfg.c...
+compiling stm32f4xx_usart.c...
+compiling stm32f4xx_dma.c...
+compiling stm32f4xx_spi.c...
+compiling stm32f4xx_sdio.c...
+compiling readline.c...
+compiling diskio.c...
+compiling ff.c...
+..\Third_Party\fat_fs\src\ff.c(1412): warning:  #111-D: statement is unreachable
+compiling ccsbcs.c...
+".\output\test.axf" - 10 Errors, 14 Warning(s).
+Target not created
+Build target 'Target 1'
+compiling main.c...
+compiling stm32f4xx_it.c...
+compiling wm8731.c...
+compiling wavplay.c...
+..\src\wavplay.c(30): warning:  #550-D: variable "i" was set but never used
+..\src\wavplay.c(144): warning:  #223-D: function "I2S_GPIO_Init" declared implicitly
+..\src\wavplay.c(167): error:  #20: identifier "RX_BUFF_SIZE" is undefined
+..\src\wavplay.c(167): error:  #20: identifier "IsocOutBuff" is undefined
+..\src\wavplay.c(237): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(344): warning:  #177-D: variable "data_len" was declared but never referenced
+..\src\wavplay.c(344): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(348): warning:  #177-D: variable "audio_fs" was declared but never referenced
+..\src\wavplay.c(349): warning:  #177-D: variable "audio_num" was declared but never referenced
+..\src\wavplay.c(350): warning:  #177-D: variable "valid" was declared but never referenced
+..\src\wavplay.c(448): warning:  #177-D: variable "NVIC_InitStructure" was declared but never referenced
+".\output\test.axf" - 2 Errors, 9 Warning(s).
+Target not created
+Build target 'Target 1'
+compiling wavplay.c...
+..\src\wavplay.c(30): warning:  #550-D: variable "i" was set but never used
+..\src\wavplay.c(144): warning:  #223-D: function "I2S_GPIO_Init" declared implicitly
+..\src\wavplay.c(239): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(346): warning:  #177-D: variable "data_len" was declared but never referenced
+..\src\wavplay.c(346): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(350): warning:  #177-D: variable "audio_fs" was declared but never referenced
+..\src\wavplay.c(351): warning:  #177-D: variable "audio_num" was declared but never referenced
+..\src\wavplay.c(352): warning:  #177-D: variable "valid" was declared but never referenced
+..\src\wavplay.c(450): warning:  #177-D: variable "NVIC_InitStructure" was declared but never referenced
+linking...
+Program Size: Code=15714 RO-data=1802 RW-data=80 ZI-data=37280  
+FromELF: creating hex file...
+".\output\test.axf" - 0 Errors, 9 Warning(s).
+Build target 'Target 1'
+compiling wavplay.c...
+..\src\wavplay.c(30): warning:  #550-D: variable "i" was set but never used
+..\src\wavplay.c(242): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(349): warning:  #177-D: variable "data_len" was declared but never referenced
+..\src\wavplay.c(349): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(353): warning:  #177-D: variable "audio_fs" was declared but never referenced
+..\src\wavplay.c(354): warning:  #177-D: variable "audio_num" was declared but never referenced
+..\src\wavplay.c(355): warning:  #177-D: variable "valid" was declared but never referenced
+..\src\wavplay.c(453): warning:  #177-D: variable "NVIC_InitStructure" was declared but never referenced
+compiling stm32f4xx_spi.c...
+linking...
+Program Size: Code=15714 RO-data=1802 RW-data=80 ZI-data=37280  
+FromELF: creating hex file...
+".\output\test.axf" - 0 Errors, 8 Warning(s).
+Load "F:\\Demo_self\\wav_player\\proj\\output\\test.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'Target 1'
+compiling main.c...
+linking...
+Program Size: Code=15714 RO-data=1802 RW-data=80 ZI-data=37280  
+FromELF: creating hex file...
+".\output\test.axf" - 0 Errors, 0 Warning(s).
+Load "F:\\Demo_self\\wav_player\\proj\\output\\test.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'Target 1'
+compiling wavplay.c...
+..\src\wavplay.c(30): warning:  #550-D: variable "i" was set but never used
+..\src\wavplay.c(242): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(349): warning:  #177-D: variable "data_len" was declared but never referenced
+..\src\wavplay.c(349): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(353): warning:  #177-D: variable "audio_fs" was declared but never referenced
+..\src\wavplay.c(354): warning:  #177-D: variable "audio_num" was declared but never referenced
+..\src\wavplay.c(355): warning:  #177-D: variable "valid" was declared but never referenced
+..\src\wavplay.c(453): warning:  #177-D: variable "NVIC_InitStructure" was declared but never referenced
+linking...
+Program Size: Code=15714 RO-data=1802 RW-data=80 ZI-data=37280  
+FromELF: creating hex file...
+".\output\test.axf" - 0 Errors, 8 Warning(s).
+Load "F:\\Demo_self\\wav_player\\proj\\output\\test.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'Target 1'
+compiling wavplay.c...
+..\src\wavplay.c(30): warning:  #550-D: variable "i" was set but never used
+..\src\wavplay.c(242): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(349): warning:  #177-D: variable "data_len" was declared but never referenced
+..\src\wavplay.c(349): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(353): warning:  #177-D: variable "audio_fs" was declared but never referenced
+..\src\wavplay.c(354): warning:  #177-D: variable "audio_num" was declared but never referenced
+..\src\wavplay.c(355): warning:  #177-D: variable "valid" was declared but never referenced
+..\src\wavplay.c(453): warning:  #177-D: variable "NVIC_InitStructure" was declared but never referenced
+linking...
+Program Size: Code=15714 RO-data=1802 RW-data=80 ZI-data=37280  
+FromELF: creating hex file...
+".\output\test.axf" - 0 Errors, 8 Warning(s).
+Load "F:\\Demo_self\\wav_player\\proj\\output\\test.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'Target 1'
+compiling wavplay.c...
+..\src\wavplay.c(30): warning:  #550-D: variable "i" was set but never used
+..\src\wavplay.c(242): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(349): warning:  #177-D: variable "data_len" was declared but never referenced
+..\src\wavplay.c(349): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(352): warning:  #550-D: variable "path" was set but never used
+..\src\wavplay.c(353): warning:  #177-D: variable "audio_fs" was declared but never referenced
+..\src\wavplay.c(354): warning:  #177-D: variable "audio_num" was declared but never referenced
+..\src\wavplay.c(416): warning:  #177-D: variable "NVIC_InitStructure" was declared but never referenced
+linking...
+Program Size: Code=18110 RO-data=1842 RW-data=84 ZI-data=59036  
+FromELF: creating hex file...
+".\output\test.axf" - 0 Errors, 8 Warning(s).
+Load "F:\\Demo_self\\wav_player\\proj\\output\\test.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'Target 1'
+compiling wavplay.c...
+..\src\wavplay.c(30): warning:  #550-D: variable "i" was set but never used
+..\src\wavplay.c(259): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "data_len" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(369): warning:  #550-D: variable "path" was set but never used
+..\src\wavplay.c(370): warning:  #177-D: variable "audio_fs" was declared but never referenced
+..\src\wavplay.c(371): warning:  #177-D: variable "audio_num" was declared but never referenced
+..\src\wavplay.c(436): warning:  #177-D: variable "NVIC_InitStructure" was declared but never referenced
+linking...
+Program Size: Code=18258 RO-data=1842 RW-data=84 ZI-data=59036  
+FromELF: creating hex file...
+".\output\test.axf" - 0 Errors, 8 Warning(s).
+Load "F:\\Demo_self\\wav_player\\proj\\output\\test.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'Target 1'
+compiling wavplay.c...
+..\src\wavplay.c(30): warning:  #550-D: variable "i" was set but never used
+..\src\wavplay.c(259): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "data_len" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(369): warning:  #550-D: variable "path" was set but never used
+..\src\wavplay.c(370): warning:  #177-D: variable "audio_fs" was declared but never referenced
+..\src\wavplay.c(371): warning:  #177-D: variable "audio_num" was declared but never referenced
+..\src\wavplay.c(436): warning:  #177-D: variable "NVIC_InitStructure" was declared but never referenced
+linking...
+Program Size: Code=18254 RO-data=1842 RW-data=84 ZI-data=59036  
+FromELF: creating hex file...
+".\output\test.axf" - 0 Errors, 8 Warning(s).
+Build target 'Target 1'
+compiling wavplay.c...
+..\src\wavplay.c(30): warning:  #550-D: variable "i" was set but never used
+..\src\wavplay.c(259): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "data_len" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(369): warning:  #550-D: variable "path" was set but never used
+..\src\wavplay.c(370): warning:  #177-D: variable "audio_fs" was declared but never referenced
+..\src\wavplay.c(371): warning:  #177-D: variable "audio_num" was declared but never referenced
+..\src\wavplay.c(438): warning:  #177-D: variable "NVIC_InitStructure" was declared but never referenced
+linking...
+Program Size: Code=18282 RO-data=1842 RW-data=84 ZI-data=59036  
+FromELF: creating hex file...
+".\output\test.axf" - 0 Errors, 8 Warning(s).
+Load "F:\\Demo_self\\wav_player\\proj\\output\\test.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'Target 1'
+compiling wavplay.c...
+..\src\wavplay.c(30): warning:  #550-D: variable "i" was set but never used
+..\src\wavplay.c(259): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "data_len" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(369): warning:  #550-D: variable "path" was set but never used
+..\src\wavplay.c(370): warning:  #177-D: variable "audio_fs" was declared but never referenced
+..\src\wavplay.c(371): warning:  #177-D: variable "audio_num" was declared but never referenced
+..\src\wavplay.c(446): warning:  #177-D: variable "NVIC_InitStructure" was declared but never referenced
+linking...
+Program Size: Code=18350 RO-data=1842 RW-data=84 ZI-data=59036  
+FromELF: creating hex file...
+".\output\test.axf" - 0 Errors, 8 Warning(s).
+Load "F:\\Demo_self\\wav_player\\proj\\output\\test.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'Target 1'
+compiling wavplay.c...
+..\src\wavplay.c(30): warning:  #550-D: variable "i" was set but never used
+..\src\wavplay.c(259): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "data_len" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(369): warning:  #550-D: variable "path" was set but never used
+..\src\wavplay.c(370): warning:  #177-D: variable "audio_fs" was declared but never referenced
+..\src\wavplay.c(371): warning:  #177-D: variable "audio_num" was declared but never referenced
+..\src\wavplay.c(446): warning:  #177-D: variable "NVIC_InitStructure" was declared but never referenced
+linking...
+Program Size: Code=18374 RO-data=1842 RW-data=84 ZI-data=59036  
+FromELF: creating hex file...
+".\output\test.axf" - 0 Errors, 8 Warning(s).
+Load "F:\\Demo_self\\wav_player\\proj\\output\\test.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'Target 1'
+compiling wavplay.c...
+..\src\wavplay.c(30): warning:  #550-D: variable "i" was set but never used
+..\src\wavplay.c(259): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "data_len" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(369): warning:  #550-D: variable "path" was set but never used
+..\src\wavplay.c(370): warning:  #177-D: variable "audio_fs" was declared but never referenced
+..\src\wavplay.c(371): warning:  #177-D: variable "audio_num" was declared but never referenced
+..\src\wavplay.c(446): warning:  #177-D: variable "NVIC_InitStructure" was declared but never referenced
+linking...
+Program Size: Code=18394 RO-data=1842 RW-data=84 ZI-data=59036  
+FromELF: creating hex file...
+".\output\test.axf" - 0 Errors, 8 Warning(s).
+Load "F:\\Demo_self\\wav_player\\proj\\output\\test.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'Target 1'
+compiling wavplay.c...
+..\src\wavplay.c(30): warning:  #550-D: variable "i" was set but never used
+..\src\wavplay.c(259): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(406): warning:  #111-D: statement is unreachable
+..\src\wavplay.c(366): warning:  #177-D: variable "data_len" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(369): warning:  #177-D: variable "path" was declared but never referenced
+..\src\wavplay.c(370): warning:  #177-D: variable "audio_fs" was declared but never referenced
+..\src\wavplay.c(371): warning:  #177-D: variable "audio_num" was declared but never referenced
+..\src\wavplay.c(459): warning:  #177-D: variable "NVIC_InitStructure" was declared but never referenced
+linking...
+Program Size: Code=15774 RO-data=1802 RW-data=80 ZI-data=59040  
+FromELF: creating hex file...
+".\output\test.axf" - 0 Errors, 9 Warning(s).
+Load "F:\\Demo_self\\wav_player\\proj\\output\\test.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'Target 1'
+compiling wavplay.c...
+..\src\wavplay.c(30): warning:  #550-D: variable "i" was set but never used
+..\src\wavplay.c(259): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(406): warning:  #111-D: statement is unreachable
+..\src\wavplay.c(366): warning:  #177-D: variable "data_len" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(369): warning:  #177-D: variable "path" was declared but never referenced
+..\src\wavplay.c(370): warning:  #177-D: variable "audio_fs" was declared but never referenced
+..\src\wavplay.c(371): warning:  #177-D: variable "audio_num" was declared but never referenced
+..\src\wavplay.c(459): warning:  #177-D: variable "NVIC_InitStructure" was declared but never referenced
+linking...
+Program Size: Code=15774 RO-data=1802 RW-data=80 ZI-data=59040  
+FromELF: creating hex file...
+".\output\test.axf" - 0 Errors, 9 Warning(s).
+Load "F:\\Demo_self\\wav_player\\proj\\output\\test.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'Target 1'
+compiling wavplay.c...
+..\src\wavplay.c(30): warning:  #550-D: variable "i" was set but never used
+..\src\wavplay.c(259): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "data_len" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(369): warning:  #177-D: variable "path" was declared but never referenced
+..\src\wavplay.c(370): warning:  #177-D: variable "audio_fs" was declared but never referenced
+..\src\wavplay.c(371): warning:  #177-D: variable "audio_num" was declared but never referenced
+..\src\wavplay.c(462): warning:  #177-D: variable "NVIC_InitStructure" was declared but never referenced
+linking...
+Program Size: Code=18398 RO-data=1842 RW-data=84 ZI-data=59036  
+FromELF: creating hex file...
+".\output\test.axf" - 0 Errors, 8 Warning(s).
+Load "F:\\Demo_self\\wav_player\\proj\\output\\test.axf" 
 Erase Done.
 Programming Done.
 Verify OK.
 Build target 'Target 1'
 compiling wm8731.c...
 linking...
-Program Size: Code=23196 RO-data=2212 RW-data=84 ZI-data=18076  
+Program Size: Code=18406 RO-data=1842 RW-data=84 ZI-data=59036  
 FromELF: creating hex file...
 ".\output\test.axf" - 0 Errors, 0 Warning(s).
-Load "C:\\Users\\emy\\Desktop\\STM32F407_for_testboard\\proj\\output\\test.axf" 
+Build target 'Target 1'
+linking...
+Program Size: Code=18406 RO-data=1842 RW-data=84 ZI-data=59036  
+FromELF: creating hex file...
+".\output\test.axf" - 0 Errors, 0 Warning(s).
+Load "F:\\Demo_self\\wav_player\\proj\\output\\test.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'Target 1'
+compiling wavplay.c...
+..\src\wavplay.c(30): warning:  #550-D: variable "i" was set but never used
+..\src\wavplay.c(259): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "data_len" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(369): warning:  #177-D: variable "path" was declared but never referenced
+..\src\wavplay.c(370): warning:  #177-D: variable "audio_fs" was declared but never referenced
+..\src\wavplay.c(371): warning:  #177-D: variable "audio_num" was declared but never referenced
+..\src\wavplay.c(372): warning:  #177-D: variable "free" was declared but never referenced
+..\src\wavplay.c(372): warning:  #177-D: variable "sz" was declared but never referenced
+..\src\wavplay.c(490): warning:  #177-D: variable "NVIC_InitStructure" was declared but never referenced
+linking...
+Program Size: Code=18346 RO-data=1842 RW-data=84 ZI-data=59036  
+FromELF: creating hex file...
+".\output\test.axf" - 0 Errors, 10 Warning(s).
+Load "F:\\Demo_self\\wav_player\\proj\\output\\test.axf" 
+Load "F:\\Demo_self\\wav_player\\proj\\output\\test.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Load "F:\\Demo_self\\wav_player\\proj\\output\\test.axf" 
 Erase Done.
 Programming Done.
 Verify OK.
 Build target 'Target 1'
 linking...
-Program Size: Code=23196 RO-data=2212 RW-data=84 ZI-data=18076  
+Program Size: Code=18346 RO-data=1842 RW-data=84 ZI-data=59036  
 FromELF: creating hex file...
 ".\output\test.axf" - 0 Errors, 0 Warning(s).
-Load "C:\\Users\\emy\\Desktop\\STM32F407_for_testboard\\proj\\output\\test.axf" 
+Build target 'Target 1'
+compiling wm8731.c...
+linking...
+Program Size: Code=18354 RO-data=1842 RW-data=84 ZI-data=59036  
+FromELF: creating hex file...
+".\output\test.axf" - 0 Errors, 0 Warning(s).
+Load "F:\\Demo_self\\wav_player\\proj\\output\\test.axf" 
 Erase Done.
 Programming Done.
 Verify OK.
 Build target 'Target 1'
 linking...
-Program Size: Code=23196 RO-data=2212 RW-data=84 ZI-data=18076  
+Program Size: Code=18354 RO-data=1842 RW-data=84 ZI-data=59036  
 FromELF: creating hex file...
 ".\output\test.axf" - 0 Errors, 0 Warning(s).
-Load "C:\\Users\\emy\\Desktop\\STM32F407_for_testboard\\proj\\output\\test.axf" 
+Rebuild target 'Target 1'
+assembling startup_stm32f4xx.s...
+compiling main.c...
+compiling stm32f4xx_it.c...
+compiling system_stm32f4xx.c...
+compiling myconfig.c...
+compiling led.c...
+compiling key.c...
+compiling delay.c...
+compiling timer.c...
+compiling usart.c...
+compiling wm8731.c...
+compiling wavplay.c...
+..\src\wavplay.c(30): warning:  #550-D: variable "i" was set but never used
+..\src\wavplay.c(259): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "data_len" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(369): warning:  #177-D: variable "path" was declared but never referenced
+..\src\wavplay.c(370): warning:  #177-D: variable "audio_fs" was declared but never referenced
+..\src\wavplay.c(371): warning:  #177-D: variable "audio_num" was declared but never referenced
+..\src\wavplay.c(372): warning:  #177-D: variable "free" was declared but never referenced
+..\src\wavplay.c(372): warning:  #177-D: variable "sz" was declared but never referenced
+..\src\wavplay.c(490): warning:  #177-D: variable "NVIC_InitStructure" was declared but never referenced
+compiling sdio_sd.c...
+compiling misc.c...
+compiling stm32f4xx_gpio.c...
+compiling stm32f4xx_tim.c...
+compiling stm32f4xx_rcc.c...
+compiling stm32f4xx_exti.c...
+compiling stm32f4xx_syscfg.c...
+compiling stm32f4xx_usart.c...
+compiling stm32f4xx_dma.c...
+compiling stm32f4xx_spi.c...
+compiling stm32f4xx_sdio.c...
+compiling readline.c...
+compiling diskio.c...
+compiling ff.c...
+..\Third_Party\fat_fs\src\ff.c(1412): warning:  #111-D: statement is unreachable
+compiling ccsbcs.c...
+linking...
+Program Size: Code=18354 RO-data=1842 RW-data=84 ZI-data=59036  
+FromELF: creating hex file...
+".\output\test.axf" - 0 Errors, 11 Warning(s).
+Load "F:\\Demo_self\\wav_player\\proj\\output\\test.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'Target 1'
+compiling wavplay.c...
+..\src\wavplay.c(30): warning:  #550-D: variable "i" was set but never used
+..\src\wavplay.c(259): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "data_len" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(369): warning:  #177-D: variable "path" was declared but never referenced
+..\src\wavplay.c(370): warning:  #177-D: variable "audio_fs" was declared but never referenced
+..\src\wavplay.c(371): warning:  #177-D: variable "audio_num" was declared but never referenced
+..\src\wavplay.c(372): warning:  #177-D: variable "free" was declared but never referenced
+..\src\wavplay.c(372): warning:  #177-D: variable "sz" was declared but never referenced
+..\src\wavplay.c(490): warning:  #177-D: variable "NVIC_InitStructure" was declared but never referenced
+linking...
+.\output\test.axf: Error: L6406E: No space in execution regions with .ANY selector matching wavplay.o(.bss).
+.\output\test.axf: Error: L6407E: Sections of aggregate size 0x20378 bytes could not fit into .ANY selector(s).
+".\output\test.axf" - 2 Errors, 10 Warning(s).
+Target not created
+Rebuild target 'Target 1'
+assembling startup_stm32f4xx.s...
+compiling main.c...
+compiling stm32f4xx_it.c...
+compiling system_stm32f4xx.c...
+compiling myconfig.c...
+compiling led.c...
+compiling key.c...
+compiling delay.c...
+compiling timer.c...
+compiling usart.c...
+compiling wm8731.c...
+compiling wavplay.c...
+..\src\wavplay.c(30): warning:  #550-D: variable "i" was set but never used
+..\src\wavplay.c(259): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "data_len" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(369): warning:  #177-D: variable "path" was declared but never referenced
+..\src\wavplay.c(370): warning:  #177-D: variable "audio_fs" was declared but never referenced
+..\src\wavplay.c(371): warning:  #177-D: variable "audio_num" was declared but never referenced
+..\src\wavplay.c(372): warning:  #177-D: variable "free" was declared but never referenced
+..\src\wavplay.c(372): warning:  #177-D: variable "sz" was declared but never referenced
+..\src\wavplay.c(490): warning:  #177-D: variable "NVIC_InitStructure" was declared but never referenced
+compiling sdio_sd.c...
+compiling misc.c...
+compiling stm32f4xx_gpio.c...
+compiling stm32f4xx_tim.c...
+compiling stm32f4xx_rcc.c...
+compiling stm32f4xx_exti.c...
+compiling stm32f4xx_syscfg.c...
+compiling stm32f4xx_usart.c...
+compiling stm32f4xx_dma.c...
+compiling stm32f4xx_spi.c...
+compiling stm32f4xx_sdio.c...
+compiling readline.c...
+compiling diskio.c...
+compiling ff.c...
+..\Third_Party\fat_fs\src\ff.c(1412): warning:  #111-D: statement is unreachable
+compiling ccsbcs.c...
+linking...
+.\output\test.axf: Error: L6406E: No space in execution regions with .ANY selector matching wavplay.o(.bss).
+.\output\test.axf: Error: L6407E: Sections of aggregate size 0x20378 bytes could not fit into .ANY selector(s).
+".\output\test.axf" - 2 Errors, 11 Warning(s).
+Target not created
+Build target 'Target 1'
+compiling wavplay.c...
+..\src\wavplay.c(30): warning:  #550-D: variable "i" was set but never used
+..\src\wavplay.c(259): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "data_len" was declared but never referenced
+..\src\wavplay.c(366): warning:  #177-D: variable "input" was declared but never referenced
+..\src\wavplay.c(369): warning:  #177-D: variable "path" was declared but never referenced
+..\src\wavplay.c(370): warning:  #177-D: variable "audio_fs" was declared but never referenced
+..\src\wavplay.c(371): warning:  #177-D: variable "audio_num" was declared but never referenced
+..\src\wavplay.c(372): warning:  #177-D: variable "free" was declared but never referenced
+..\src\wavplay.c(372): warning:  #177-D: variable "sz" was declared but never referenced
+..\src\wavplay.c(490): warning:  #177-D: variable "NVIC_InitStructure" was declared but never referenced
+linking...
+Program Size: Code=18354 RO-data=1842 RW-data=84 ZI-data=99996  
+FromELF: creating hex file...
+".\output\test.axf" - 0 Errors, 10 Warning(s).
+Load "F:\\Demo_self\\wav_player\\proj\\output\\test.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'Target 1'
+compiling wm8731.c...
+linking...
+Program Size: Code=18346 RO-data=1842 RW-data=84 ZI-data=99996  
+FromELF: creating hex file...
+".\output\test.axf" - 0 Errors, 0 Warning(s).
+Load "F:\\Demo_self\\wav_player\\proj\\output\\test.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+Build target 'Target 1'
+compiling wm8731.c...
+linking...
+Program Size: Code=18338 RO-data=1842 RW-data=84 ZI-data=99996  
+FromELF: creating hex file...
+".\output\test.axf" - 0 Errors, 0 Warning(s).
+Load "F:\\Demo_self\\wav_player\\proj\\output\\test.axf" 
 Erase Done.
 Programming Done.
 Verify OK.

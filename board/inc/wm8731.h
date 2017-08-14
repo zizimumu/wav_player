@@ -10,6 +10,7 @@ void wm_8731_vol_down(void);
 
 void wm_8731_vol_up(void);
 
+void wm_8731_record_init(u32 sample,u32 frame_bits );
 
 
 #endif

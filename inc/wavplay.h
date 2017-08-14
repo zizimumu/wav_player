@@ -42,6 +42,7 @@ WAVE_TypeDef;
 
 
 void wav_play(void);
+void wav_record(void);
 
 u8 WaveParsing(const u8 * buf);
 u32 ReadUnit(u8 *buffer, u8 idx, u8 NbrOfBytes, Endianness BytesFormat);

@@ -236,3 +236,75 @@ void wm_8731_init(u32 sample,u32 frame_bits )
 	
 	write_register(9, 0x01);  	// active interface
 }
+
+
+
+void wm_8731_record_init(u32 sample,u32 frame_bits )
+{
+    u16 date_len = 0;
+    u16 samp_fmt= 0;
+
+    switch(frame_bits){
+        case 32 :
+            date_len = CODEC_DATA_LENGTH_32;
+            break;
+        case 24 :
+            date_len = CODEC_DATA_LENGTH_24;
+            break;
+        case 16 :
+            date_len = CODEC_DATA_LENGTH_16;
+            break;
+
+         default :
+            printf("err frame bit frame_bits\r\n");
+            break;
+    };
+    switch(sample){
+        case 96000 :
+            samp_fmt = CODEC_SMAPLE_FMT_96K;
+            break;
+        case 48000 :
+            samp_fmt = CODEC_SMAPLE_FMT_48K;
+            break;
+        case 32000 :
+            samp_fmt = CODEC_SMAPLE_FMT_32K;
+            break;
+	case 44100 :
+		samp_fmt = CODEC_SMAPLE_FMT_44_1K;
+		break;
+
+         default :
+	    samp_fmt = CODEC_SMAPLE_FMT_48K;
+            printf("sample err %d,set to 48K\r\n",sample);
+            break;
+    };    
+	wm_spi_init();
+	wm8731_gpio_init();
+
+
+	write_register(0x0f,0x00);		//reset all
+
+	delay_ms(1);
+	write_register(0x09,0x00);		//inactive
+	delay_ms(1);
+	
+	write_register(0x00,0x13);//left line in vol,max is 0x1f,0x13 is 0db
+	write_register(0x01, 0x13);  	//right line in vol
+	
+	//write_register(4, 0x15); 		 // Analogue Audio Path Control: set mic as input and boost it, and enable dac 
+	//write_register(4, 0x02); 		 // Analogue Audio Path Control: set mic as input and boost it, and enable dac 
+	//write_register(5, 0x09);  	// ADC ,DAC Digital Audio Path Control: disable soft mute   
+
+	
+	//write_register(5, 0x00);  	// ADC ,DAC Digital Audio Path Control: disable soft mute   
+	write_register(6, 0);  			// power down control: power on all 
+	write_register(7, CODEC_DATA_FORTMAT_MSB_L | (date_len <<2) );  	// 0x01:MSB,left,iwl=16-bits, Enable slave Mode;0x09 : MSB,left,24bit
+	
+	write_register(8, samp_fmt << 1);  	// Normal, Base OVer-Sampleing Rate 384 fs (BOSR=1) 
+	
+	write_register(9, 0x01);  	// active interface
+
+
+}
+
+

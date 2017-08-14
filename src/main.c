@@ -15,7 +15,7 @@ int main(void)
 	NVIC_Configuration();
 	PeriphConfig();
 
-	COM1Init(115200);
+	COM1Init(921600);
 	//COM1_DMA_Init();
 	//TIM3_Init(8400,10000);
 
@@ -44,7 +44,7 @@ int main(void)
 
 
 	s_putstring("inited the wm8731\r\n");
-	wav_play();
+	wav_record();
 	while(1){
 	}
 
