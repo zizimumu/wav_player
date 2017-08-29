@@ -11,7 +11,7 @@ typedef enum
   KEY4 = 3,
 } Key_Def;
 
-static const u16 KEY_PIN[4]={GPIO_Pin_0, GPIO_Pin_1, GPIO_Pin_2, GPIO_Pin_10};
+static const u16 KEY_PIN[4]={GPIO_Pin_7, GPIO_Pin_6, };
 static const u16 KEY_SRC[4]={EXTI_Line0, EXTI_Line1, EXTI_Line2, EXTI_Line10};
 static const u8  KEY_PNS[4]={EXTI_PinSource0, EXTI_PinSource1, EXTI_PinSource2, EXTI_PinSource10};
 static const u8  KEY_IRQ[4]={EXTI0_IRQn, EXTI1_IRQn, EXTI2_IRQn, EXTI15_10_IRQn};

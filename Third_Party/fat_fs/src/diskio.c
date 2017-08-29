@@ -143,11 +143,14 @@ DRESULT disk_write (
 	BYTE count			/* Number of sectors to write (1..255) */
 )
 {
+u32 retry_cnt = 0;
   SD_Error Status;
   if( !count )
   {    
     return RES_PARERR;  /* count不能等于0，否则返回参数错误 */
   }
+
+  retry :
   switch (drv)
   {
     case 0:
@@ -160,7 +163,7 @@ DRESULT disk_write (
        Status = SD_WriteMultiBlocks( (uint8_t *)(&buff[0]) ,sector << 9 ,SDCardInfo.CardBlockSize,count);	  
     } 
     /* Check if the Transfer is finished */
-    Status = SD_WaitReadOperation();
+    Status = SD_WaitWriteOperation();
     while(SD_GetStatus() != SD_TRANSFER_OK);	                                               
     if(Status == SD_OK)
     {
@@ -168,7 +171,12 @@ DRESULT disk_write (
     }
     else
     {
-       return RES_ERROR;
+    	if(retry_cnt <= 10){
+			retry_cnt ++;
+			goto retry;
+	}
+	else
+       		return RES_ERROR;
     }
     case 2:
 	   break;

@@ -3,6 +3,8 @@
 #include "stdio.h"
 #include "wm8731.h"
 #include "usart.h"
+#include "key.h"
+
 #include "delay.h"
 #include <stdio.h>
 #include <string.h>
@@ -78,17 +80,21 @@ int get_stop(void)
 	int ret = 0;
     u8 val = 0;
 	if(uart_data_valid()){
-        val = uart_read_char();
-		if(val == 0x03) // ctr + c
-			ret = 1;
+	        val = uart_read_char();
+			if(val == 0x03) // ctr + c
+				ret = 1;
 
-        if(val == 'u'){ // up key
-            wm_8731_vol_up();
-        }
-        else if(val == 'd'){// down key
-            wm_8731_vol_down();
-        }
+	        if(val == 'u'){ // up key
+	            wm_8731_vol_up();
+	        }
+	        else if(val == 'd'){// down key
+	            wm_8731_vol_down();
+	        }
 	}
+
+	if(KEY_Scan() == 1)
+		ret = 1;
+	
 	return ret ;
 }
 
@@ -372,8 +378,7 @@ void wav_record(void)
     	u32 rd,wr,i,free,sz;
 	u32 f_sz = 0,block;
 
-	for(i=0;i<4096;i++)
-		rec_buff[i]=i;
+
 
 
   	f_mount(0, &fatfs);
@@ -386,23 +391,63 @@ void wav_record(void)
 
 
 #if 0
-	while(1){
-		rt = f_write(&gFile,rec_buff,512,&BytesRead);
+	sz = 20*1024*1024;
+	data_len = 40960;
 
-		if(BytesRead != 512)
+	for(i=0;i<data_len;i++)
+		rec_buff[i]=(u8)i;
+
+	while(1){
+		rt = f_write(&gFile,rec_buff,data_len,&BytesRead);
+
+		if(BytesRead != data_len)
 			printf("write data err %d,%d\r\n",BytesRead,rt);
 		
-		f_sz += 512;
+		f_sz += data_len;
 
-		if(f_sz >= 100*1024*1024){
-			f_close(&gFile);
+		if(f_sz >= sz){
+			//f_close(&gFile);
 			printf("write done\r\n");
+			break ;
+
+		}
+
+
+	}
+	printf("read ckeck ...\r\n");
+	f_sz = 0;
+	f_close(&gFile);
+	rt = f_open(&gFile, "0:/test.bin", FA_READ);
+	if(rt != FR_OK){
+		printf("open file error %d \r\n",rt) ;
+		return ;
+    	}	
+	while(1){
+		memset(rec_buff,0,data_len);
+		rt = f_read(&gFile,rec_buff,data_len,&BytesRead);
+
+		if(BytesRead != data_len)
+			printf("read data err %d,%d\r\n",BytesRead,rt);
+
+		for(i=0;i<data_len;i++){
+			if(rec_buff[i] != (u8)i){
+				printf("ckeck faild,%d,rec_buff[i]=%d\r\n",i,rec_buff[i]);
+			}
+		}
+		
+		f_sz += data_len;
+
+		if(f_sz >= sz){
+			f_close(&gFile);
+			printf("ckeck done\r\n");
 			return ;
 
 		}
 
-	//
+
 	}
+
+	
 #endif	
 
 
@@ -413,12 +458,13 @@ void wav_record(void)
 	block = 0;
 	while(1){
 		if(get_stop()){
-			printf("ctrl + c to stop ,file size %d\r\n",f_sz);
+			printf("stopped ,file size %d\r\n",f_sz);
 			record_Stop();
 			f_close(&gFile);
 
 			return ;
 		}	
+
 #if 0
 		wr = RX_BUFF_SIZE - DMA_GetCurrDataCounter(DMA1_Stream3)*2;
 		if(wr >= rd)
@@ -459,24 +505,24 @@ void wav_record(void)
 		if(wr >= RX_BUFF_SIZE/2 && block == 0){
 			block = 1;
 			rd = 0;
-			for(i=0;i<RX_BUFF_SIZE/2/512;i++){
-				rt = f_write(&gFile,rec_buff + rd,MIN_BLOCK,&BytesRead);
-				if(BytesRead !=MIN_BLOCK )
+			//for(i=0;i<RX_BUFF_SIZE/2/512;i++){
+				rt = f_write(&gFile,rec_buff ,RX_BUFF_SIZE/2,&BytesRead);
+				if(BytesRead !=RX_BUFF_SIZE/2 )
 					printf("write data err %d,%d\r\n",BytesRead,rt);
-				rd  += MIN_BLOCK;
-			}
+				rd  += RX_BUFF_SIZE/2;
+			//}
 				
 		}
 
 		else if(wr < RX_BUFF_SIZE/2 && block == 1){
 			block = 0;
 			rd = 0;
-			for(i=0;i<RX_BUFF_SIZE/2/512;i++){
-				rt = f_write(&gFile,rec_buff +RX_BUFF_SIZE/2+ rd,MIN_BLOCK,&BytesRead);
-				if(BytesRead !=MIN_BLOCK )
+			//for(i=0;i<RX_BUFF_SIZE/2/512;i++){
+				rt = f_write(&gFile,rec_buff +RX_BUFF_SIZE/2,RX_BUFF_SIZE/2,&BytesRead);
+				if(BytesRead !=RX_BUFF_SIZE/2 )
 					printf("write data err %d,%d\r\n",BytesRead,rt);
-				rd  += MIN_BLOCK;
-			}
+				rd  += RX_BUFF_SIZE/2;
+			//}
 		}
 #endif
 	}

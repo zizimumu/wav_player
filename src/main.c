@@ -19,7 +19,7 @@ int main(void)
 	//COM1_DMA_Init();
 	//TIM3_Init(8400,10000);
 
-	//Key_Init();
+	Key_Init();
 	//LED_Init();
 	//COM1Init(115200);
 	//delay_ms(1000);
